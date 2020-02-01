@@ -3,12 +3,17 @@
 <head>
 	<title>Webgrid /tg</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--suppress CssUnusedSymbol -->
 	<style type="text/css">
 		:root {
 			--base-size : 1mm;
 		}
 
 		@media (-webkit-min-device-pixel-ratio : 1), not all, (min-resolution : 1dppx), (min-resolution : 96dpi) {
+		}
+
+		* {
+			box-sizing : border-box;
 		}
 
 		html {
@@ -19,16 +24,26 @@
 		}
 
 		html, body {
-			margin   : 0;
-			padding  : 0;
-			overflow : hidden;
+			margin  : 0;
+			padding : 0;
+			/*overflow : hidden;*/
 		}
 
 		html {
 			background : white;
 		}
 
-		#container {
+		body {
+			-ms-overflow-style : none; /* Internet Explorer 10+ */
+			/*noinspection CssUnknownProperty*/
+			scrollbar-width    : none; /* Firefox */
+		}
+
+		body::-webkit-scrollbar {
+			display : none; /* Safari and Chrome */
+		}
+
+		.container {
 			width          : 100vw;
 			height         : 100vh;
 			outline        : solid calc(var(--base-size) * 2) magenta;
@@ -42,7 +57,6 @@
 			border-style : solid;
 			border-width : 0 calc(var(--base-size) * 1) calc(var(--base-size) * 1) 0;
 			border-color : #00ffff;
-			box-sizing   : border-box;
 			/*outline        : solid calc(var(--base-size) * 1) #00ffff;*/
 			/*outline-offset : calc(var(--base-size) * -1);*/
 			/*margin-left    : calc(var(--base-size) * -1);*/
@@ -72,24 +86,77 @@
 			height         : 100%;
 			width          : 64px;
 		}
+
+		#debug {
+			background : white;
+			position   : fixed;
+			right      : 0;
+			top        : 2em;
+			text-align : right;
+			display    : flex;
+			flex-direction: column;
+		}
+
+		.anim {
+			border-width : calc(var(--base-size) * 1);
+			border-style : solid;
+			border-color : transparent;
+			background   : white;
+			display: inline-block;
+		}
+
+		.anim.anim0 {
+			border-color : magenta !important;
+		}
+
+		.anim.anim1 {
+			border-color : yellow !important;
+		}
+
+		.anim.anim2 {
+			border-color : cyan !important;
+		}
+
+		.anim.anim3 {
+			border-color : red !important;
+		}
+
+		.anim.anim4 {
+			border-color : #00ff00 !important;
+		}
+
+		.anim.anim5 {
+			border-color : #0000ff !important;
+		}
+
+		.anim.anim6 {
+			border-color : #000000 !important;
+		}
 	</style>
 </head>
 <body>
 <template class="box">
 	<div class="box"></div>
 </template>
-<div id="container"></div>
+<div id="container" class="container"></div>
+<div class="container"></div>
+<div id="debug">
+	<span id="event1" class="anim"></span><span id="event2" class="anim"></span>
+</div>
 <div class="prozent100"></div>
 <script type="text/javascript">
 
 	(function () {
 
 		let container = document.querySelector('#container');
+		let cEvent1 = document.querySelector('#event1');
+		let cEvent2 = document.querySelector('#event2');
+
+		let cDebugSwitch = 0;
 
 		const init = function () {
 
-
-			for (let i = 1; i < 50; i++) {
+			for (let i = 80; i > 0; i--) {
 				let node = document.createElement('div');
 				node.classList.add('box');
 				let child = container.appendChild(node);
@@ -99,6 +166,24 @@
 				child.setAttribute('rel', `${size}`);
 			}
 
+			// Events
+			document.addEventListener('scroll', onScroll.bind(this));
+			window.addEventListener('resize', onResize.bind(this));
+		};
+
+		const onScroll = function (event) {
+			debugWrite(cEvent1, `${event.type} ${Math.floor(window.scrollY)}`);
+		};
+
+		const onResize = function (event) {
+			debugWrite(cEvent2, `${event.type} ${window.innerWidth} * ${window.innerHeight}`);
+		};
+
+		const debugWrite = function (element, line) {
+			element.textContent = line;
+			element.classList.remove(`anim${cDebugSwitch}`);
+			cDebugSwitch = ++cDebugSwitch % 7;
+			element.classList.add(`anim${cDebugSwitch}`);
 		};
 
 		init.bind(this)();
