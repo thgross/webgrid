@@ -9,9 +9,6 @@
 		}
 
 		@media (-webkit-min-device-pixel-ratio : 1), not all, (min-resolution : 1dppx), (min-resolution : 96dpi) {
-			.dppx:before {
-				content : "1";
-			}
 		}
 
 		html {
@@ -41,9 +38,15 @@
 		}
 
 		.box {
-			position       : absolute;
-			outline        : solid calc(var(--base-size) * 1) lightblue;
-			outline-offset : calc(var(--base-size) * -1);
+			position     : absolute;
+			border-style : solid;
+			border-width : 0 calc(var(--base-size) * 1) calc(var(--base-size) * 1) 0;
+			border-color : #00ffff;
+			box-sizing   : border-box;
+			/*outline        : solid calc(var(--base-size) * 1) #00ffff;*/
+			/*outline-offset : calc(var(--base-size) * -1);*/
+			/*margin-left    : calc(var(--base-size) * -1);*/
+			/*margin-top     : calc(var(--base-size) * -1);*/
 		}
 
 		.box:before {
@@ -61,7 +64,7 @@
 		}
 
 		.prozent100 {
-			outline        : solid calc(var(--base-size) * 1) yellow;
+			outline        : solid calc(var(--base-size) * 1) #ffff00;
 			outline-offset : calc(var(--base-size) * -1);
 			position       : absolute;
 			top            : 0;
@@ -86,7 +89,7 @@
 		const init = function () {
 
 
-			for (let i = 0; i < 50; i++) {
+			for (let i = 1; i < 50; i++) {
 				let node = document.createElement('div');
 				node.classList.add('box');
 				let child = container.appendChild(node);
