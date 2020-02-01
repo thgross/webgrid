@@ -5,20 +5,87 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style type="text/css">
 		html, body {
-			margin  : 0;
-			padding : 0;
+			margin      : 0;
+			padding     : 0;
+			font-family : monospace;
+			overflow    : hidden;
 		}
 
-		.container {
-			width   : 100vw;
-			height  : 100vh;
-			outline : inset 4px magenta;
+		html {
+			background : white;
+		}
+
+		#container {
+			width          : 100vw;
+			height         : 100vh;
+			outline        : solid 4px magenta;
+			outline-offset : -4px;
+			overflow       : hidden;
+			position       : relative;
+		}
+
+		.box {
+			position       : absolute;
+			outline        : solid 2px lightblue;
+			outline-offset : -2px;
+		}
+
+		.box:before {
+			position : absolute;
+			content  : attr(rel);
+			left     : 4px;
+			bottom   : 0;
+		}
+
+		.box:after {
+			position : absolute;
+			content  : attr(rel);
+			right    : 2px;
+		}
+
+		.prozent100 {
+			outline        : solid 2px yellow;
+			outline-offset : -2px;
+			position       : absolute;
+			top            : 0;
+			left           : 32px;
+			height         : 100%;
+			width          : 64px;
 		}
 	</style>
 </head>
 <body>
-<div class="container">
+<template class="box">
+	<div class="box"></div>
+</template>
+<div id="container"></div>
+<div class="prozent100"></div>
+<script type="text/javascript">
 
-</div>
+	(function () {
+
+		let container = document.querySelector('#container');
+
+		const init = function () {
+
+
+			for (let i = 0; i < 50; i++) {
+				let node = document.createElement('div');
+				node.classList.add('box');
+				let child = container.appendChild(node);
+				let size = i * 64;
+				child.style.height = `${size}px`;
+				child.style.width = `${size}px`;
+				child.setAttribute('rel', `${size}`);
+			}
+
+		};
+
+		init.bind(this)();
+
+	})();
+
+</script>
+
 </body>
 </html>
